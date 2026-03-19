@@ -98,3 +98,7 @@ if (check) {
 - 目标页面不能是 `chrome://` 等系统页面
 - 操作前确认页面已完全加载
 - 动态内容需先调用 `collectAllElements()` 重新收集
+
+## 相关链接
+
+- [GitHub 仓库](https://github.com/TangJing/openclaw_access_web_page_js)

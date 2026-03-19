@@ -259,7 +259,7 @@ ElementCollector.collectAllElements();
 
 ```bash
 # 克隆项目
-git clone https://gitee.com/TonyDon/page_js.git
+git clone https://github.com/TangJing/openclaw_access_web_page_js.git
 cd page_js
 
 # 安装测试依赖
@@ -291,6 +291,6 @@ MIT License
 
 ## 🔗 相关链接
 
-- [Gitee 仓库](https://gitee.com/TonyDon/page_js)
+- [GitHub 仓库](https://github.com/TangJing/openclaw_access_web_page_js)
 - [Chrome 扩展开发文档](https://developer.chrome.com/docs/extensions/)
 - [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
