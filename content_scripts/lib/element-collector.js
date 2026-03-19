@@ -38,7 +38,7 @@ function normalizeClass(className) {
   }
   
   if (!classStr || classStr === '[object Object]') return '';
-  
+  console.log(classStr)
   return classStr.trim().split(/\s+/).join('|');
 }
 
