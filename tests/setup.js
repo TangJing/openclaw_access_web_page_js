@@ -10,9 +10,6 @@ const path = require('path');
 const collectorPath = path.join(__dirname, '../content_scripts/lib/element-collector.js');
 const collectorCode = fs.readFileSync(collectorPath, 'utf-8');
 
-// 在全局执行代码
-eval(collectorCode);
-
 // 模拟 chrome API
 global.chrome = {
   runtime: {
@@ -26,3 +23,6 @@ global.chrome = {
     sendMessage: () => Promise.resolve({})
   }
 };
+
+// 在全局执行代码（在 chrome API 定义之后）
+eval(collectorCode);
