@@ -1,11 +1,8 @@
 // Content Script - 注入到网页中执行
 
-console.log('Content script 已加载');
-
 // 监听来自 popup 或 background 的消息
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log('Content script 收到消息:', message);
-  
+
   if (message.action === 'getPageInfo') {
     sendResponse({
       title: document.title,
@@ -19,8 +16,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // 页面加载完成后执行
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM 加载完成');
-  
+
   // 调用自动收集 HTML 标签方法
   if (window.ElementCollector) {
     window.ElementCollector.collectAllElements();

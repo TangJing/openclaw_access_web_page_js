@@ -13,7 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
       status.textContent = `页面标题：${response.title}`;
     } catch (error) {
       status.textContent = '错误：无法连接到页面';
-      console.error(error);
     }
   });
 });

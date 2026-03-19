@@ -38,7 +38,6 @@ function normalizeClass(className) {
   }
   
   if (!classStr || classStr === '[object Object]') return '';
-  console.log(classStr)
   return classStr.trim().split(/\s+/).join('|');
 }
 
@@ -130,8 +129,7 @@ function collectAllElements() {
       keywordMap.get(keyword).add(key);
     });
   });
-  
-  console.log(`[ElementCollector] 已收集 ${elementMap.size} 个元素`);
+
   return elementMap.size;
 }
 
@@ -145,7 +143,6 @@ function searchElementsByKey(key) {
   
   const matchedKeys = keywordMap.get(key);
   if (!matchedKeys || matchedKeys.size === 0) {
-    console.log(`[ElementCollector] 未找到匹配关键字 "${key}" 的元素`);
     return [];
   }
   
@@ -156,8 +153,7 @@ function searchElementsByKey(key) {
       elements.push(element);
     }
   });
-  
-  console.log(`[ElementCollector] 找到 ${elements.length} 个匹配元素`);
+
   return elements;
 }
 
@@ -196,7 +192,6 @@ function exportData() {
 function clearData() {
   elementMap.clear();
   keywordMap.clear();
-  console.log('[ElementCollector] 数据已清空');
 }
 
 // 导出 API
@@ -216,12 +211,9 @@ if (document.readyState === 'loading') {
   collectAllElements();
 }
 
-console.log('[ElementCollector] 模块已加载');
-
 // 添加便捷的页面搜索助手（在控制台可直接使用）
 window.$search = function(key) {
   if (!window.ElementCollector) {
-    console.error('ElementCollector 未加载');
     return [];
   }
   return window.ElementCollector.searchElementsByKey(key);
@@ -229,7 +221,6 @@ window.$search = function(key) {
 
 window.$collect = function() {
   if (!window.ElementCollector) {
-    console.error('ElementCollector 未加载');
     return 0;
   }
   return window.ElementCollector.collectAllElements();
@@ -237,10 +228,7 @@ window.$collect = function() {
 
 window.$elements = function() {
   if (!window.ElementCollector) {
-    console.error('ElementCollector 未加载');
     return 0;
   }
   return window.ElementCollector.getElementCount();
 };
-
-console.log('[ElementCollector] 快捷命令已加载：$search(), $collect(), $elements()');
