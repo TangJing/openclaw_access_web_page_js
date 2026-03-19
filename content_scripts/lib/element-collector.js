@@ -13,12 +13,15 @@ const keywordMap = new Map();
 
 /**
  * 将 class 字符串中的空格替换为 |
- * @param {string} className - class 字符串
+ * @param {string|SVGAnimatedString} className - class 字符串或 SVGAnimatedString
  * @returns {string} - 处理后的 class 字符串
  */
 function normalizeClass(className) {
   if (!className) return '';
-  return className.trim().split(/\s+/).join('|');
+  // 处理 SVGAnimatedString 对象
+  const classStr = typeof className === 'string' ? className : className.baseVal || String(className);
+  if (!classStr) return '';
+  return String(classStr).trim().split(/\s+/).join('|');
 }
 
 /**
@@ -30,7 +33,11 @@ function generateElementKey(element) {
   const id = element.id || '';
   const className = normalizeClass(element.className);
   const title = element.title || '';
-  const innerText = (element.innerText || '').trim().slice(0, 100); // 限制长度
+  // 处理 innerText 可能不存在的情况（如 SVG 元素）
+  let innerText = '';
+  if (element.innerText) {
+    innerText = String(element.innerText).trim().slice(0, 100);
+  }
   
   return [id, className, title, innerText].join('|');
 }
