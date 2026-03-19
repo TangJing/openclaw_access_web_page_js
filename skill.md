@@ -49,34 +49,47 @@ Map<keyword, Set<keys>>
 | `exportData()` | 无 | `Object` | 导出所有数据（调试用） |
 | `clearData()` | 无 | `void` | 清空所有数据 |
 
-### 使用示例
+## 使用示例
 
 ```javascript
-// 1. 手动收集元素（页面加载后自动执行）
+// 注意：首先在普通网页（如 https://www.example.com）上确保扩展已加载
+// 在控制台输入以下命令
+
+// 1. 检查 ElementCollector 是否可用
+if (typeof ElementCollector !== 'undefined') {
+  console.log('ElementCollector 已就绪');
+} else {
+  console.log('ElementCollector 未加载，请检查：');
+  console.log('1. 扩展是否已安装并启用');
+  console.log('2. 是否在普通网页上（非 chrome:// 等系统页面）');
+  console.log('3. 页面是否已刷新');
+}
+
+// 2. 手动收集元素（页面加载后自动执行，可选）
 ElementCollector.collectAllElements();
 
-// 2. 通过 id 搜索
+// 3. 通过 id 搜索
 const header = ElementCollector.searchElementsByKey('header');
 
-// 3. 通过 class 搜索
+// 4. 通过 class 搜索
 const buttons = ElementCollector.searchElementsByKey('btn');
 
-// 4. 通过文本搜索
+// 5. 通过文本搜索
 const loginBtn = ElementCollector.searchElementsByKey('登录');
 
-// 5. 通过 title 搜索
+// 6. 通过 title 搜索
 const tooltip = ElementCollector.searchElementsByKey('提示文本');
 
-// 6. 获取统计信息
+// 7. 获取统计信息
 console.log(`元素数量：${ElementCollector.getElementCount()}`);
 console.log(`关键字数量：${ElementCollector.getKeywordCount()}`);
 
-// 7. 导出数据
+// 8. 导出数据
 const data = ElementCollector.exportData();
 console.log(data.elements); // 所有 key
 console.log(data.keywords); // 所有关键字
 
-// 8. 清空数据
+// 9. 清空数据
 ElementCollector.clearData();
 ```
 
@@ -139,12 +152,32 @@ with zipfile.ZipFile('page_js_extension.zip', 'w') as z:
 ## 注意事项
 
 ### 1. 特殊页面无法注入
-以下页面类型不支持：
-- `chrome://` 开头的页面
+以下页面类型不支持，`ElementCollector` 会是 `undefined`：
+- `chrome://` 开头的页面（扩展管理页、设置页等）
 - `chrome-extension://` 开头的页面
-- 新标签页、设置页等系统页面
+- 新标签页、书签页、历史记录页等系统页面
+- 扩展程序商店页面
 
-### 2. 动态内容处理
+**解决方法**：在普通网页上使用，如 `https://www.example.com`
+
+### 2. 需要刷新页面
+安装或更新扩展后，需要刷新目标页面才能注入脚本。
+
+**解决方法**：
+1. 安装/更新扩展
+2. 打开目标网页
+3. 按 F5 刷新页面
+4. 在控制台检查 `ElementCollector`
+
+### 3. 检查扩展是否加载
+在控制台执行：
+```javascript
+console.log(typeof ElementCollector);
+// 输出 "object" 表示已加载
+// 输出 "undefined" 表示未加载
+```
+
+### 4. 动态内容处理
 SPA 应用路由切换后，需要手动重新收集：
 ```javascript
 // 路由变化后
