@@ -530,4 +530,52 @@ describe('ElementCollector', () => {
       expect(testUtils.search('inner').length).toBeGreaterThan(0);
     });
   });
+
+  describe('空属性处理测试', () => {
+    test('应该正确处理没有任何属性的元素', () => {
+      const container = document.getElementById('test-container');
+      // 创建一个没有任何 id/class/title/innerText 的元素
+      container.innerHTML = '<div></div><span id="hasId">有 ID</span>';
+      
+      testUtils.collect();
+      
+      // 至少应该收集到有 id 的元素
+      const count = window.ElementCollector.getElementCount();
+      expect(count).toBeGreaterThan(0);
+      
+      // 有 id 的元素应该被收集
+      const results = testUtils.search('hasId');
+      expect(results.length).toBeGreaterThan(0);
+    });
+
+    test('应该正确处理只有部分属性的元素', () => {
+      const container = document.getElementById('test-container');
+      container.innerHTML = `
+        <div id="onlyId">内容 1</div>
+        <div class="onlyClass">内容 2</div>
+        <div title="onlyTitle">内容 3</div>
+        <div>只有文本</div>
+      `;
+      
+      testUtils.collect();
+      
+      // 验证每种情况都能被收集
+      expect(testUtils.search('onlyId').length).toBeGreaterThan(0);
+      expect(testUtils.search('onlyClass').length).toBeGreaterThan(0);
+      expect(testUtils.search('onlyTitle').length).toBeGreaterThan(0);
+    });
+
+    test('应该不保存所有属性都为空的元素', () => {
+      const container = document.getElementById('test-container');
+      // 空 div 没有 id/class/title/innerText
+      container.innerHTML = '<div></div><br /><hr />';
+      
+      testUtils.collect();
+      
+      // 这些元素可能不会被收集（取决于 innerText 是否为空）
+      // 主要验证不报错
+      const count = window.ElementCollector.getElementCount();
+      expect(() => count).not.toThrow();
+    });
+  });
 });

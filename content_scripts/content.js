@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 可以在这里添加页面操作逻辑
 function injectElement() {
+  /*
   const div = document.createElement('div');
   div.id = 'page-js-injected';
   div.textContent = 'Page JS Extension';
@@ -40,7 +41,8 @@ function injectElement() {
   div.style.color = 'white';
   div.style.borderRadius = '4px';
   div.style.zIndex = '9999';
-  document.body.appendChild(div);
+  //document.body.appendChild(div);
+  */
 }
 
 // 当 body 可用时注入元素

@@ -27,18 +27,48 @@ function normalizeClass(className) {
 /**
  * 生成元素的唯一 key
  * @param {Element} element - DOM 元素
- * @returns {string} - 生成的 key
+ * @returns {string|null} - 生成的 key，如果没有有效属性则返回 null
  */
 function generateElementKey(element) {
-  const id = element.id || '';
-  const className = normalizeClass(element.className);
-  const title = element.title || '';
-  // 处理 innerText 可能不存在的情况（如 SVG 元素）
-  let innerText = '';
-  if (element.innerText) {
-    innerText = String(element.innerText).trim().slice(0, 100);
+  // 安全获取 id
+  let id = '';
+  try {
+    id = element.id || '';
+  } catch (e) {
+    id = '';
   }
-  
+
+  // 安全获取 class
+  let className = '';
+  try {
+    className = normalizeClass(element.className);
+  } catch (e) {
+    className = '';
+  }
+
+  // 安全获取 title
+  let title = '';
+  try {
+    title = element.title || '';
+  } catch (e) {
+    title = '';
+  }
+
+  // 安全获取 innerText
+  let innerText = '';
+  try {
+    if (element.innerText) {
+      innerText = String(element.innerText).trim().slice(0, 100);
+    }
+  } catch (e) {
+    innerText = '';
+  }
+
+  // 如果所有属性都为空，则不保存该元素
+  if (!id && !className && !title && !innerText) {
+    return null;
+  }
+
   return [id, className, title, innerText].join('|');
 }
 
@@ -66,10 +96,10 @@ function collectAllElements() {
   
   allElements.forEach((element, index) => {
     const key = generateElementKey(element);
-    
-    // 跳过空 key
+
+    // 跳过空 key 或 null
     if (!key) return;
-    
+
     // 存入 elementMap
     elementMap.set(key, element);
     
