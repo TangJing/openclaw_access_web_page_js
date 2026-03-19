@@ -28,12 +28,19 @@
     {
       "matches": ["<all_urls>"],
       "js": [
-        "content_scripts/lib/element-collector.js",
+        "content_scripts/lib/element-collector.js"
+      ],
+      "run_at": "document_idle",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": [
         "content_scripts/content.js"
       ],
       "css": ["styles/content.css"],
       "run_at": "document_idle",
-      "world": "MAIN"
+      "world": "ISOLATED"
     }
   ],
   "icons": {
