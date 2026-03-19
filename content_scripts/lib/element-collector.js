@@ -136,25 +136,25 @@ function collectAllElements() {
 /**
  * 根据关键字搜索元素
  * @param {string} key - 搜索关键字
- * @returns {Element[]} - 匹配的元素数组
+ * @returns {Object} - 匹配的元素对象，key 为 elementMap 的 key，value 为对应的 DOM 元素
  */
 function searchElementsByKey(key) {
-  if (!key) return [];
-  
+  if (!key) return {};
+
   const matchedKeys = keywordMap.get(key);
   if (!matchedKeys || matchedKeys.size === 0) {
-    return [];
+    return {};
   }
-  
-  const elements = [];
+
+  const result = {};
   matchedKeys.forEach(elementKey => {
     const element = elementMap.get(elementKey);
     if (element) {
-      elements.push(element);
+      result[elementKey] = element;
     }
   });
 
-  return elements;
+  return result;
 }
 
 /**
@@ -214,7 +214,7 @@ if (document.readyState === 'loading') {
 // 添加便捷的页面搜索助手（在控制台可直接使用）
 window.$search = function(key) {
   if (!window.ElementCollector) {
-    return [];
+    return {};
   }
   return window.ElementCollector.searchElementsByKey(key);
 };
