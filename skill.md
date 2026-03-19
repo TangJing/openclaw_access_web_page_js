@@ -51,6 +51,20 @@ Map<keyword, Set<keys>>
 
 ## 使用示例
 
+### 快速开始
+
+```javascript
+// 1. 检查 ElementCollector 是否可用
+console.log(typeof ElementCollector);
+// 输出 "object" 表示已加载
+// 输出 "undefined" 表示未加载
+
+// 2. 查看已收集的元素数量
+ElementCollector.getElementCount();
+```
+
+### 完整 API 使用
+
 ```javascript
 // 注意：首先在普通网页（如 https://www.example.com）上确保扩展已加载
 // 在控制台输入以下命令
@@ -91,6 +105,49 @@ console.log(data.keywords); // 所有关键字
 
 // 9. 清空数据
 ElementCollector.clearData();
+```
+
+### 快捷命令（推荐）
+
+为了更方便地在控制台使用，提供了以下快捷命令：
+
+```javascript
+// $search(key) - 搜索元素
+$search('header')        // 搜索包含 'header' 的元素
+$search('btn')           // 搜索包含 'btn' 的元素
+$search('登录')          // 搜索包含 '登录' 的元素
+
+// $collect() - 重新收集元素
+$collect()               // 返回收集的元素数量
+
+// $elements() - 查看已收集的元素数量
+$elements()              // 返回当前收集的元素数量
+```
+
+### 搜索结果处理
+
+```javascript
+// 搜索返回 Element 数组
+const elements = ElementCollector.searchElementsByKey('btn');
+
+// 遍历结果
+elements.forEach((el, index) => {
+  console.log(`元素 ${index}:`, el.tagName, el.id, el.className);
+});
+
+// 获取第一个匹配元素
+const first = elements[0];
+
+// 高亮显示搜索结果
+elements.forEach(el => {
+  el.style.border = '2px solid red';
+  el.style.backgroundColor = 'yellow';
+});
+
+// 滚动到第一个匹配元素
+if (elements.length > 0) {
+  elements[0].scrollIntoView({ behavior: 'smooth' });
+}
 ```
 
 ## 项目结构

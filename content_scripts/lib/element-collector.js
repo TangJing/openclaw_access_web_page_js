@@ -217,3 +217,30 @@ if (document.readyState === 'loading') {
 }
 
 console.log('[ElementCollector] 模块已加载');
+
+// 添加便捷的页面搜索助手（在控制台可直接使用）
+window.$search = function(key) {
+  if (!window.ElementCollector) {
+    console.error('ElementCollector 未加载');
+    return [];
+  }
+  return window.ElementCollector.searchElementsByKey(key);
+};
+
+window.$collect = function() {
+  if (!window.ElementCollector) {
+    console.error('ElementCollector 未加载');
+    return 0;
+  }
+  return window.ElementCollector.collectAllElements();
+};
+
+window.$elements = function() {
+  if (!window.ElementCollector) {
+    console.error('ElementCollector 未加载');
+    return 0;
+  }
+  return window.ElementCollector.getElementCount();
+};
+
+console.log('[ElementCollector] 快捷命令已加载：$search(), $collect(), $elements()');
