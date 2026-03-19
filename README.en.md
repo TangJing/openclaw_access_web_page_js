@@ -1,36 +1,185 @@
-# page_js
+# Page JS Extension
 
-#### Description
-{**When you're done, you can delete the content in this README and update the file with details for others getting started with your repository**}
+A Chrome extension that automatically collects page HTML tag structures and supports fast searching and positioning of page elements through keywords.
 
-#### Software Architecture
-Software architecture description
+## Features
 
-#### Installation
+- 🚀 **Auto Collection**: Automatically collects all HTML tags after page load
+- 🔍 **Keyword Search**: Quickly search elements by id, class, title, innerText
+- 📦 **Dual Map Structure**: elementMap stores elements, keywordMap stores keyword mappings
+- 🌐 **Global Injection**: Supports automatic injection on all web pages
+- 🎯 **Precise Positioning**: Returns references to matched DOM elements
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## Project Structure
 
-#### Instructions
+```
+page_js/
+├── manifest.json              # Extension config (Manifest V3)
+├── background/
+│   └── background.js          # Service Worker background script
+├── content_scripts/
+│   ├── content.js             # Main injection script
+│   └── lib/
+│       └── element-collector.js  # Element collector core library
+├── popup/
+│   ├── popup.html             # Popup page
+│   ├── popup.css              # Popup styles
+│   └── popup.js               # Popup logic
+├── styles/
+│   └── content.css            # Injected page styles
+└── icons/
+    ├── icon16.svg             # 16x16 icon
+    ├── icon48.svg             # 48x48 icon
+    └── icon128.svg            # 128x128 icon
+```
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+## Installation
 
-#### Contribution
+### Method 1: Developer Mode (Recommended for development)
 
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
+1. Open Chrome browser, visit `chrome://extensions/`
+2. Enable **"Developer mode"** in the top right corner
+3. Click **"Load unpacked"**
+4. Select the `page_js` project directory
+5. Extension installed
 
+### Method 2: Using packed file
 
-#### Gitee Feature
+1. Download `page_js_extension.zip`
+2. Extract to any directory
+3. Load the extracted directory as in Method 1
 
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+### Icon Conversion (Optional)
+
+Icons in the project are SVG format. For production release, convert to PNG:
+
+```bash
+# Using ImageMagick
+convert icons/icon16.svg icons/icon16.png
+convert icons/icon48.svg icons/icon48.png
+convert icons/icon128.svg icons/icon128.png
+```
+
+## Usage
+
+### API Reference
+
+The extension provides the following methods on `window.ElementCollector`:
+
+#### `collectAllElements()`
+Collect all HTML tags and build index.
+
+```javascript
+ElementCollector.collectAllElements();
+```
+
+#### `searchElementsByKey(key)`
+Search elements by keyword.
+
+```javascript
+// Search elements with class containing 'btn'
+const btns = ElementCollector.searchElementsByKey('btn');
+
+// Search element with id 'header'
+const headers = ElementCollector.searchElementsByKey('header');
+
+// Search elements with text containing 'Login'
+const logins = ElementCollector.searchElementsByKey('Login');
+```
+
+#### `getElementCount()`
+Get the number of collected elements.
+
+```javascript
+const count = ElementCollector.getElementCount();
+```
+
+#### `getKeywordCount()`
+Get the number of indexed keywords.
+
+```javascript
+const keywordCount = ElementCollector.getKeywordCount();
+```
+
+#### `exportData()`
+Export all data (for debugging).
+
+```javascript
+const data = ElementCollector.exportData();
+console.log(data);
+```
+
+#### `clearData()`
+Clear all collected data.
+
+```javascript
+ElementCollector.clearData();
+```
+
+### Data Format
+
+#### elementMap
+```
+Key format: id|class|title|innerText
+- id: Element id attribute
+- class: Element class (spaces replaced with |)
+- title: Element title attribute
+- innerText: Element text content (max 100 chars)
+```
+
+Example key: `header|nav|main-menu|Home`
+
+#### keywordMap
+```
+Keyword -> Set<elementMap keys>
+```
+
+## Architecture
+
+- **Manifest V3**: Latest Chrome extension specification
+- **Service Worker**: Replaces traditional background page
+- **Content Scripts**: Scripts injected into pages
+- **Dual Map Index**: O(1) search time complexity
+
+## Notes
+
+1. Some special pages cannot be injected:
+   - Pages starting with `chrome://`
+   - Pages starting with `chrome-extension://`
+   - System pages like new tab, settings, etc.
+
+2. Dynamically loaded content (e.g., after SPA route changes) requires manual call to `collectAllElements()`
+
+3. Icon files need PNG format to display correctly
+
+## Development
+
+```bash
+# Clone the project
+git clone https://gitee.com/TonyDon/page_js.git
+
+# Enter project directory
+cd page_js
+
+# Install dependencies (if any)
+npm install
+
+# Reload extension after code changes
+# Click refresh button on chrome://extensions/ page
+```
+
+## Contributing
+
+1. Fork this repository
+2. Create `Feat_xxx` branch
+3. Commit your code
+4. Create Pull Request
+
+## License
+
+MIT License
+
+## Links
+
+- [Gitee Repository](https://gitee.com/TonyDon/page_js)
+- [Chrome Extension Documentation](https://developer.chrome.com/docs/extensions/)
