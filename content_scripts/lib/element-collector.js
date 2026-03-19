@@ -107,11 +107,22 @@ function collectAllElements() {
   // 清空现有数据
   elementMap.clear();
   keywordMap.clear();
-  
+
   // 获取页面所有元素
   const allElements = document.querySelectorAll('*');
-  
+
   allElements.forEach((element, index) => {
+    // 跳过密码类型的输入框（隐私保护）
+    if (element.tagName === 'INPUT' && element.type === 'password') {
+      return;
+    }
+    
+    // 跳过敏感类型的输入框（隐私保护）
+    const sensitiveTypes = ['password', 'hidden', 'file'];
+    if (element.tagName === 'INPUT' && sensitiveTypes.includes(element.type)) {
+      return;
+    }
+
     const key = generateElementKey(element);
 
     // 跳过空 key 或 null
@@ -119,7 +130,7 @@ function collectAllElements() {
 
     // 存入 elementMap
     elementMap.set(key, element);
-    
+
     // 构建 keywordMap
     const keywords = splitKey(key);
     keywords.forEach(keyword => {
