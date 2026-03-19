@@ -1,0 +1,17 @@
+{
+  "name": "page_js_tests",
+  "version": "1.0.0",
+  "description": "Page JS Extension 单元测试",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "testMatch": ["**/tests/**/*.test.js"],
+    "setupFilesAfterEnv": ["./tests/setup.js"]
+  }
+}
