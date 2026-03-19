@@ -13,15 +13,33 @@ const keywordMap = new Map();
 
 /**
  * 将 class 字符串中的空格替换为 |
- * @param {string|SVGAnimatedString} className - class 字符串或 SVGAnimatedString
+ * @param {string|SVGAnimatedString|any} className - class 字符串或 SVGAnimatedString
  * @returns {string} - 处理后的 class 字符串
  */
 function normalizeClass(className) {
   if (!className) return '';
-  // 处理 SVGAnimatedString 对象
-  const classStr = typeof className === 'string' ? className : className.baseVal || String(className);
-  if (!classStr) return '';
-  return String(classStr).trim().split(/\s+/).join('|');
+  
+  // 处理各种类型的 className
+  let classStr = '';
+  
+  if (typeof className === 'string') {
+    classStr = className;
+  } else if (className && typeof className === 'object') {
+    // SVGAnimatedString 或其他对象
+    if (typeof className.baseVal === 'string') {
+      classStr = className.baseVal;
+    } else if (typeof className.toString === 'function') {
+      classStr = String(className.toString());
+    } else {
+      classStr = String(className);
+    }
+  } else {
+    classStr = String(className);
+  }
+  
+  if (!classStr || classStr === '[object Object]') return '';
+  
+  return classStr.trim().split(/\s+/).join('|');
 }
 
 /**
